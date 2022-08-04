@@ -16,14 +16,8 @@ public class PictureDisplayViewModel extends ViewModel {
     public final LiveData<List<FileImgBean>> fileImg = _fileImg;
 
     public void requestPicture(Context context){
-       List<FileImgBean> list =  PictureDisplayModel.getPicture(context);
-       List<FileImgBean> liveDataList = _fileImg.getValue();
-       if(liveDataList==null){
-           _fileImg.setValue(list);
-       }else {
-           liveDataList.addAll(list);
-           _fileImg.setValue(liveDataList);
-       }
+       PictureDisplayModel.getPicture(context, _fileImg::postValue);
+
     }
 
 }

@@ -13,6 +13,19 @@ public class ViewConstants {
     public static final String MIME_TYPE  = "image/jpg";
 
     // 数字限制
-    public static final int PICTURE_UPDATE_LIMIT  = 6;
+    public static final int PICTURE_UPDATE_LIMIT  = 8;
+    public static final int EACH_PAGE_PICTURE_UPDATE_LIMIT  = 32;
+
+    // handlerThread线程名称
+    public static final String DOWNLOAD_PICTURE_HANDLER_THREAD  = "downloadPictureHandlerThread";
+
+    // handler内部区分标识
+    public static final int DOWNLOAD_HANDLER  = 1;
+
+    // sharedPreference 标识
+    public static final String REMEMBER_IMAGE_FILE = "RememberImageFile";
+
+
+
 
 }
