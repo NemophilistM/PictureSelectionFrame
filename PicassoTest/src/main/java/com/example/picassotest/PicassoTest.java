@@ -18,7 +18,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 
 import com.example.picassotest.Action.Action;
-import com.example.picassotest.RequestHandler.DownLoad;
+import com.example.picassotest.DownLoad.DownLoader;
+import com.example.picassotest.DownLoad.OkHttpDownLoader;
 import com.example.picassotest.RequestHandler.MediaStoreRequestHandler;
 import com.example.picassotest.RequestHandler.RequestCreator;
 import com.example.picassotest.RequestHandler.RequestHandler;
@@ -151,6 +152,17 @@ public class PicassoTest {
         return singleton;
     }
 
+    public RequestCreator load(String path) {
+        if (path == null) {
+            return new RequestCreator(this, null);
+        }
+        if (path.trim().length() == 0) {
+            throw new IllegalArgumentException("Path must not be empty.");
+        }
+        return load(Uri.parse(path));
+
+    }
+
     public RequestCreator load(Uri uri) {
         return new RequestCreator(this, uri);
     }
@@ -278,7 +290,7 @@ public class PicassoTest {
     public static class Builder {
         private final Context context;
         private Cache cache;
-        private DownLoad downLoad;
+        private DownLoader downLoader;
         private List<RequestHandler> requestHandlers;
         private Bitmap.Config defaultBitmapConfig;
         private PicassoExecutorService service;
@@ -321,15 +333,15 @@ public class PicassoTest {
             if (cache == null) {
                 cache = new LruCache(context);
             }
-            if (downLoad == null) {
-                downLoad = Utils.createDownLoadFromUri(context);
+            if (downLoader == null) {
+                downLoader = Utils.createDownLoadFromUri(context);
             }
 
             if (service == null) {
                 service = new PicassoExecutorService();
             }
 
-            Dispatcher dispatcher = new Dispatcher(context, service, HANDLER, downLoad, cache);
+            Dispatcher dispatcher = new Dispatcher(context, service, HANDLER, downLoader, cache);
             Log.d(Constants.TAG, "PicassoTest.Build(一个内部类).build: 返回一个PicassoTest实例");
             return new PicassoTest(context, dispatcher, requestHandlers, cache, defaultBitmapConfig);
 

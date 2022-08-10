@@ -1,5 +1,9 @@
 package com.example.picassotest;
 
+import static android.content.Context.ACTIVITY_SERVICE;
+import static android.content.pm.ApplicationInfo.FLAG_LARGE_HEAP;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static android.os.Build.VERSION_CODES.HONEYCOMB_MR1;
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
@@ -9,10 +13,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Looper;
 import android.os.Process;
+import android.os.StatFs;
 
-import com.example.picassotest.RequestHandler.DownLoad;
+import com.example.picassotest.DownLoad.OkHttpDownLoader;
 import com.example.picassotest.RequestHandler.Request;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ThreadFactory;
@@ -20,6 +26,17 @@ import java.util.concurrent.ThreadFactory;
 public final class Utils {
 
     static final char KEY_SEPARATOR = '\n';
+
+    private static final String PICASSO_CACHE = "picasso-cache";
+
+    // okhttp请求时间
+    public static final int DEFAULT_READ_TIMEOUT_MILLIS = 20 * 1000; // 20s
+    public static final int DEFAULT_WRITE_TIMEOUT_MILLIS = 20 * 1000; // 20s
+    public static final int DEFAULT_CONNECT_TIMEOUT_MILLIS = 15 * 1000; // 15s
+
+    // okhttp缓存的内存限制
+    private static final int MIN_DISK_CACHE_SIZE = 5 * 1024 * 1024; // 5MB
+    private static final int MAX_DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
 
     /**
      * 线程仅限于主线程以创建密钥
@@ -35,7 +52,7 @@ public final class Utils {
      * @param context 上下文
      * @return 内存最大值的1/7
      */
-    static int calculateMemoryCacheSize(Context context){
+     static int calculateMemoryCacheSize(Context context){
         ActivityManager am = getService(context,Constants.ACTIVITY_SERVICE);
 //        boolean largeHeap = (context.getApplicationInfo().flags&Constants.FLAG_LARGE_HEAP)!=0;
         int memoryClass = am.getMemoryClass();
@@ -74,6 +91,37 @@ public final class Utils {
             return new PicassoThread(r);
         }
     }
+
+    /**
+     * 创建供response存储的文件
+     */
+    public static File createDefaultCacheDir(Context context) {
+        File cache = new File(context.getApplicationContext().getCacheDir(), PICASSO_CACHE);
+        if (!cache.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            cache.mkdirs();
+        }
+        return cache;
+    }
+
+    /**
+     * 获取网络请求缓存文件的最大内存
+     */
+    public static long calculateDiskCacheSize(File dir) {
+        long size = MIN_DISK_CACHE_SIZE;
+
+        try {
+            StatFs statFs = new StatFs(dir.getAbsolutePath());
+            long available = ((long) statFs.getBlockCount()) * statFs.getBlockSize();
+            // 目标是总空间的 2%。
+            size = available / 50;
+        } catch (IllegalArgumentException ignored) {
+        }
+
+        // 限制在磁盘缓存的 min max 大小内
+        return Math.max(Math.min(size, MAX_DISK_CACHE_SIZE), MIN_DISK_CACHE_SIZE);
+    }
+
 
     /**
      * 返回一个线程
@@ -180,8 +228,8 @@ public final class Utils {
         return Looper.getMainLooper().getThread() == Thread.currentThread();
     }
 
-    public static DownLoad createDownLoadFromUri(Context context){
-        return new DownLoad(context);
+    public static OkHttpDownLoader createDownLoadFromUri(Context context){
+        return new OkHttpDownLoader();
     }
 
 }

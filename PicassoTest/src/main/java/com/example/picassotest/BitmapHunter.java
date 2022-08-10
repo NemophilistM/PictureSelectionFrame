@@ -157,8 +157,6 @@ public class BitmapHunter implements Runnable {
                 }finally {
                     Utils.closeQuietly(inputStream);
                 }
-            } else {
-                Log.d(Constants.TAG, "BitmapHunter.hunt: 下载的图片不为空");
             }
         }
         return bitmap;

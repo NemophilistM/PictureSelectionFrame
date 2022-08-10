@@ -18,7 +18,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.picassotest.Action.Action;
-import com.example.picassotest.RequestHandler.DownLoad;
+import com.example.picassotest.DownLoad.DownLoader;
+import com.example.picassotest.DownLoad.OkHttpDownLoader;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,7 +37,7 @@ import java.util.concurrent.ExecutorService;
 public class Dispatcher {
     final Context context;
     final ExecutorService service;
-    final DownLoad downLoad;
+    final DownLoader downLoader;
     final Map<String, BitmapHunter> hunterMap;
     final Handler handler;
     final Handler mainThreadHandler;
@@ -53,7 +54,7 @@ public class Dispatcher {
      */
     final Map<Object, Action> pausedActions;
 
-    public Dispatcher(Context context, PicassoExecutorService service, Handler mainThreadHandler, DownLoad downLoad, Cache cache) {
+    public Dispatcher(Context context, PicassoExecutorService service, Handler mainThreadHandler, DownLoader downLoader, Cache cache) {
         this.context = context;
         this.service = service;
 
@@ -61,7 +62,7 @@ public class Dispatcher {
         this.dispatcherThread = new DispatcherThread();
         this.dispatcherThread.start();
 
-        this.downLoad = downLoad;
+        this.downLoader = downLoader;
 
         //专门负责存储hunter的，对于同一个action不重复创建hunter节省资源
         this.hunterMap = new LinkedHashMap<String, BitmapHunter>();
@@ -146,7 +147,6 @@ public class Dispatcher {
 
     void performComplete(BitmapHunter hunter) {
         cache.set(hunter.getKey(), hunter.getResult());
-
         //将特定的bitmapHunter从map中移除
         hunterMap.remove(hunter.getKey());
         batch(hunter);

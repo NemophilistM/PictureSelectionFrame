@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".view.EachPictureShowActivity">
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tb_main"
+        android:id="@+id/tb_each_position"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
@@ -17,13 +17,18 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/black"
-            android:id="@+id/tv_total_size"
+            android:id="@+id/tv_each_position"
             android:layout_gravity="center_horizontal"
             />
     </androidx.appcompat.widget.Toolbar>
-    <ImageView
+    <com.example.choosephotoapplication.widget.SlideImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/iv_display_picture"
+        android:layout_below="@+id/tb_each_position"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
 </RelativeLayout>

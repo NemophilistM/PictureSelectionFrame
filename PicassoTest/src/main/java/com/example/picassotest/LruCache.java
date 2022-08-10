@@ -48,10 +48,8 @@ public class LruCache implements Cache{
         synchronized (this) {
             mapValue = map.get(key);
             if (mapValue != null) {
-                Log.d(Constants.TAG, "LruCache.get: 从内存中获取图片成功并返回 ");
                 return mapValue;
             }
-            Log.d(Constants.TAG, "LruCache.get: 从内存中获取图片失败并返回空 ");
 
         }
         return null;
