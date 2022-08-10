@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.PictureDisplayActivity">
+    tools:context=".view.EachPictureShowActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_main"
         android:layout_width="match_parent"
@@ -18,18 +18,12 @@
             android:textSize="16sp"
             android:textColor="@color/black"
             android:id="@+id/tv_total_size"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal"
             />
     </androidx.appcompat.widget.Toolbar>
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/pb_picture_display"/>
-<androidx.recyclerview.widget.RecyclerView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/rv_picture_display"
-    android:layout_below="@+id/tb_main"/>
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/iv_display_picture"
+        />
 </RelativeLayout>

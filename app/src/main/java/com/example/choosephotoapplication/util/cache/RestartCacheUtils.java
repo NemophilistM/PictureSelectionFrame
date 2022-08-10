@@ -1,22 +1,17 @@
 package com.example.choosephotoapplication.util.cache;
 
-import static com.example.choosephotoapplication.PictureDisplayActivity.handlerThread;
+import static com.example.choosephotoapplication.view.PictureDisplayActivity.handlerThread;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
-import com.example.choosephotoapplication.MyApplication;
-import com.example.choosephotoapplication.PictureDisplayActivity;
 import com.example.choosephotoapplication.ViewConstants;
 import com.example.choosephotoapplication.adapter.PictureDisplayAdapter;
 

@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 
 import com.example.choosephotoapplication.ViewConstants;
 import com.example.choosephotoapplication.entiy.FileImgBean;
+import com.example.picassotest.Constants;
 
 import java.io.File;
 import java.io.FileOutputStream;

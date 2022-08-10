@@ -1,8 +1,10 @@
 package com.example.choosephotoapplication.entiy;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class FileImgBean {
+public class FileImgBean implements Parcelable  {
     private String data;
     private long id;
     private String title;
@@ -11,6 +13,50 @@ public class FileImgBean {
     private String  size;
     private Uri uri;
 
+    public FileImgBean() {
+
+    }
+
+    public FileImgBean(Parcel in) {
+        data = in.readString();
+        id = in.readLong();
+        title = in.readString();
+        mimeType = in.readString();
+        date = in.readString();
+        size = in.readString();
+        uri = in.readParcelable(Uri.class.getClassLoader());
+    }
+
+    public static final Creator<FileImgBean> CREATOR = new Creator<FileImgBean>() {
+        @Override
+        public FileImgBean createFromParcel(Parcel in) {
+            return new FileImgBean(in);
+        }
+
+        @Override
+        public FileImgBean[] newArray(int size) {
+            return new FileImgBean[size];
+        }
+    };
+
+
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(data);
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(mimeType);
+        dest.writeString(date);
+        dest.writeString(size);
+        dest.writeParcelable(uri, 0);
+    }
     public Uri getUri() {
         return uri;
     }
@@ -66,4 +112,8 @@ public class FileImgBean {
     public void setSize(String size) {
         this.size = size;
     }
+
+
+
+
 }

@@ -1,4 +1,4 @@
-package com.example.choosephotoapplication;
+package com.example.choosephotoapplication.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -8,18 +8,24 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.HandlerThread;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.example.choosephotoapplication.R;
+import com.example.choosephotoapplication.ViewConstants;
 import com.example.choosephotoapplication.adapter.PictureDisplayAdapter;
+import com.example.choosephotoapplication.adapter.PictureDisplayByPicassoTestAdapter;
 import com.example.choosephotoapplication.databinding.ActivityPictureDisplayBinding;
 import com.example.choosephotoapplication.entiy.FileImgBean;
 import com.example.choosephotoapplication.util.ThreadPoolUtil;
 import com.example.choosephotoapplication.vm.PictureDisplayViewModel;
+import com.example.picassotest.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +33,7 @@ import java.util.List;
 public class PictureDisplayActivity extends AppCompatActivity {
 
     private ActivityPictureDisplayBinding binding;
-    private PictureDisplayAdapter adapter;
+    private PictureDisplayByPicassoTestAdapter adapter;
     private PictureDisplayViewModel viewModel;
     private List<FileImgBean> list;
     private int version = 0;
@@ -73,21 +79,18 @@ public class PictureDisplayActivity extends AppCompatActivity {
             binding.pbPictureDisplay.setVisibility(View.GONE);
             if(pictureList.size() == 0){
                 Toast.makeText(this,"暂无相片",Toast.LENGTH_SHORT).show();
+                binding.tvTotalSize.setText(String.valueOf(pictureList.size()));
             }else {
-                adapter = new PictureDisplayAdapter(pictureList,recyclerView,new PictureDisplayAdapter.requestAndEnter() {
-                    @Override
-                    public void load() {
-
-                    }
-
-                    @Override
-                    public void enter() {
-
-                    }
+                binding.tvTotalSize.setText(String.valueOf(pictureList.size()));
+                adapter = new PictureDisplayByPicassoTestAdapter(this,pictureList,recyclerView,position -> {
+                    Intent intent = new Intent(this,EachPictureShowActivity.class);
+//                    intent.putExtra(Constants.PARCELABLE, (Parcelable) pictureList);
+                    intent.putParcelableArrayListExtra(Constants.PARCELABLE, pictureList);
+                    intent.putExtra(Constants.LIST_POSITION, position);
+                    startActivity(intent);
                 });
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
             }
 
 
@@ -101,7 +104,7 @@ public class PictureDisplayActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_enter);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_hamburger_button);
         }
     }
 

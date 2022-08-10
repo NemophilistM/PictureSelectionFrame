@@ -6,13 +6,14 @@ import com.example.choosephotoapplication.entiy.FileImgBean;
 import com.example.choosephotoapplication.util.ThreadPoolUtil;
 import com.example.choosephotoapplication.util.ImgUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PictureDisplayModel {
     public static void getPicture(Context context,CallBack callBack){
 
         ThreadPoolUtil.getThreadPoolExecutor().execute(()->{
-            List<FileImgBean> list  = ImgUtils.getImgList(context);
+            ArrayList<FileImgBean> list  = ImgUtils.getImgList(context);
             callBack.callBackWhetherTure(list);
         });
 
@@ -22,6 +23,6 @@ public class PictureDisplayModel {
      * 回调给vm层设置数据
      */
     public interface CallBack {
-        void callBackWhetherTure(List<FileImgBean> list);
+        void callBackWhetherTure(ArrayList<FileImgBean> list);
     }
 }
