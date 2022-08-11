@@ -99,22 +99,22 @@ public class PictureDisplayByPicassoTestAdapter extends RecyclerView.Adapter<Pic
     public void onBindViewHolder(@NonNull PictureDisplayByPicassoTestAdapter.ViewHolder holder, int position) {
         int nowPosition = position*4;
         if(position>fileImgBeans.size()/4){
-            holder.viewOne.setTag(fileImgBeans.get(nowPosition).getUri());
+//            holder.viewOne.setTag(fileImgBeans.get(nowPosition).getUri());
             PicassoTest.with(context).load(fileImgBeans.get(nowPosition).getUri()).resize(200,200).centerInside().placeholder(R.drawable.ic_wait).tag(context).into(holder.viewOne);
 
             if(nowPosition+1<fileImgBeans.size()){
-                holder.viewTwo.setTag(fileImgBeans.get(nowPosition+1).getUri());
+//                holder.viewTwo.setTag(fileImgBeans.get(nowPosition+1).getUri());
                 PicassoTest.with(context).load(fileImgBeans.get(nowPosition+1).getUri()).resize(200,200).centerInside().placeholder(R.drawable.ic_wait).tag(context).into(holder.viewTwo);
             }else if(nowPosition+2<fileImgBeans.size()){
-                holder.viewThree.setTag(fileImgBeans.get(nowPosition+2).getUri());
+//                holder.viewThree.setTag(fileImgBeans.get(nowPosition+2).getUri());
                 PicassoTest.with(context).load(fileImgBeans.get(nowPosition+2).getUri()).resize(200,200).centerInside().placeholder(R.drawable.ic_wait).tag(context).into(holder.viewThree);
             }
 
         }else {
-            holder.viewOne.setTag(fileImgBeans.get(nowPosition).getUri());
-            holder.viewTwo.setTag(fileImgBeans.get(nowPosition+1).getUri());
-            holder.viewThree.setTag(fileImgBeans.get(nowPosition+2).getUri());
-            holder.viewFour.setTag(fileImgBeans.get(nowPosition+3).getUri());
+//            holder.viewOne.setTag(fileImgBeans.get(nowPosition).getUri());
+//            holder.viewTwo.setTag(fileImgBeans.get(nowPosition+1).getUri());
+//            holder.viewThree.setTag(fileImgBeans.get(nowPosition+2).getUri());
+//            holder.viewFour.setTag(fileImgBeans.get(nowPosition+3).getUri());
 
             PicassoTest.with(context).load(fileImgBeans.get(nowPosition).getUri()).resize(200,200).centerInside().placeholder(R.drawable.ic_wait).tag(context).into(holder.viewOne);
             PicassoTest.with(context).load(fileImgBeans.get(nowPosition+1).getUri()).resize(200,200).centerInside().placeholder(R.drawable.ic_wait).tag(context).into(holder.viewTwo);
