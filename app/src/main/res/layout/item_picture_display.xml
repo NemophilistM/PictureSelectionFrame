@@ -1,29 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    <com.example.choosephotoapplication.widget.SquareView
+    android:baselineAligned="false">
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/iv_display_one">
-    </com.example.choosephotoapplication.widget.SquareView>
-    <com.example.choosephotoapplication.widget.SquareView
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.example.choosephotoapplication.widget.SquareView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/iv_display_one" />
+            <com.example.choosephotoapplication.widget.SelectCheckbox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:solidRadius="10dp"
+                app:strokeWidth="2dp"
+                app:textSize="14sp"
+                android:id="@+id/cb_one"
+                android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/iv_display_two"/>
-    <com.example.choosephotoapplication.widget.SquareView
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.example.choosephotoapplication.widget.SquareView
+            android:id="@+id/iv_display_two"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+            <com.example.choosephotoapplication.widget.SelectCheckbox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:solidRadius="10dp"
+                app:strokeWidth="2dp"
+                app:textSize="14sp"
+                android:id="@+id/cb_two"
+                android:layout_alignParentEnd="true" />
+
+
+
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/iv_display_three"/>
-    <com.example.choosephotoapplication.widget.SquareView
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.example.choosephotoapplication.widget.SquareView
+            android:id="@+id/iv_display_three"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+            <com.example.choosephotoapplication.widget.SelectCheckbox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:solidRadius="10dp"
+                app:strokeWidth="2dp"
+                app:textSize="14sp"
+                android:id="@+id/cb_three"
+                android:layout_alignParentEnd="true" />
+
+
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/iv_display_four"/>
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+        <com.example.choosephotoapplication.widget.SquareView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/iv_display_four"/>
+
+            <com.example.choosephotoapplication.widget.SelectCheckbox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:solidRadius="10dp"
+                app:strokeWidth="2dp"
+                app:textSize="14sp"
+                android:id="@+id/cb_four"
+                android:layout_alignParentEnd="true" />
+
+
+
+    </RelativeLayout>
+
 
 
 </LinearLayout>

@@ -17,9 +17,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.picassotest.Action.Action;
-import com.example.picassotest.DownLoad.DownLoader;
-import com.example.picassotest.DownLoad.OkHttpDownLoader;
+import com.example.picassotest.action.Action;
+import com.example.picassotest.downLoad.DownLoader;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -139,6 +139,48 @@ public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView
      * 上次触碰的手指数量
      */
     private int lastFingerNum = 0;
+    /**
+     * 滑动速度
+     */
+    private double follSpeed = 0;
+
+    /**
+     * 是否滑动
+     */
+    private boolean isInertialSliding = false;
+
+    /**
+     * 记录滑动屏幕时间
+     */
+    private double isPhaseTime = 0;
+    /**
+     * 记录结束滑屏前一段时间
+     */
+    private double isBeforeEndTime = 0;
+    /**
+     * 记录结束滑动应该暂停的时间
+     */
+    private double RememberTime = 200;
+
+    /**
+     * 存储移动距离
+     */
+    float[] moveFloat;
+
+    /**
+     * 最低移动距离
+     */
+    private float minMoveDistance = 50;
+    /**
+     * 自动滑动时间
+     */
+    private float autoSlideTime = 200;
+
+    private PointF originClickPoint = new PointF();
+
+    private float clickRange = 50;
+
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -162,21 +204,19 @@ public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView
 
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-//                // 调用方法告知父类不要进行拦截
-//                getParent().requestDisallowInterceptTouchEvent(true);
-//
-//
                 //手指按下事件
                 //记录被点击的点的坐标
                 clickPoint.set(event.getX(), event.getY());
                 //判断屏幕上此时被按住的点的个数，当前屏幕只有一个点被点击的时候触发
                 if (event.getPointerCount() == 1) {
-                    //设置一个点击的间隔时长，来判断是不是双击
-                    if (System.currentTimeMillis() - lastClickTime <= doubleClickTimeSpan) {
+                    //设置一个点击的间隔时长，来判断是不是双击,,补充：添加对点击范围的判断
+                    if (System.currentTimeMillis() - lastClickTime <= doubleClickTimeSpan && Math.abs(originClickPoint.x - clickPoint.x) < clickRange && Math.abs(originClickPoint.y - clickPoint.y) < clickRange) {
                         //如果图片此时缩放模式是普通模式，就触发双击放大
                         if (zoomInMode == ZoomMode.Ordinary) {
                             //分别记录被点击的点到图片左上角x,y轴的距离与图片x,y轴边长的比例，方便在进行缩放后，算出这个点对应的坐标点
                             tempPoint.set((clickPoint.x - bitmapOriginPoint.x) / scaleSize.x, (clickPoint.y - bitmapOriginPoint.y) / scaleSize.y);
+                            originClickPoint.x = event.getX();
+                            originClickPoint.y = event.getY();
                             //进行缩放
                             scaleImage(new PointF(originScale.x * doubleClickZoom, originScale.y * doubleClickZoom));
                             //获取缩放后，图片左上角的xy坐标
@@ -186,12 +226,17 @@ public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView
                             zoomInMode = ZoomMode.ZoomIn;
                             //并在双击放大后记录缩放比例
                             doubleFingerScale = originScale.x * doubleClickZoom;
+
                         } else {
                             //双击还原
+                            originClickPoint.x = event.getX();
+                            originClickPoint.y = event.getY();
                             showCenter();
                             zoomInMode = ZoomMode.Ordinary;
                         }
                     } else {
+                        originClickPoint.x = event.getX();
+                        originClickPoint.y = event.getY();
                         lastClickTime = System.currentTimeMillis();
                     }
                 }
@@ -211,7 +256,7 @@ public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView
                 //记录此时屏幕触碰的点的数量
                 lastFingerNum = 1;
                 //判断缩放后的比例，如果小于最初的那个比例，就恢复到最初的大小
-                if (scaleSize.x<viewSize.x && scaleSize.y<viewSize.y){
+                if (scaleSize.x < viewSize.x && scaleSize.y < viewSize.y) {
                     zoomInMode = ZoomMode.Ordinary;
                     showCenter();
                 }
@@ -237,18 +282,22 @@ public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView
                         clickPoint.x = currentX;
                         clickPoint.y = currentY;
                         lastFingerNum = event.getPointerCount();
+
+//                        originClickPoint.x =currentX;
+//                        originClickPoint.y =currentY;
                     }
                     //将移动手指时，实时计算出来的中心点坐标，减去被点击点的坐标就得到了需要移动的距离
                     float moveX = currentX - clickPoint.x;
                     float moveY = currentY - clickPoint.y;
                     //计算边界，使得不能已出边界，但是如果是双指缩放时移动，因为存在缩放效果，
                     //所以此时的边界判断无效
-                    float[] moveFloat = moveBorderDistance(moveX, moveY);
+                    moveFloat = moveBorderDistance(moveX, moveY);
                     //处理移动图片的事件
+
 
                     // 如果是边界就告知父类view可以拦截，如果不是边界，就告知它不要拦截
                     getParent().requestDisallowInterceptTouchEvent(moveFloat[0] != 0);
-                    
+
                     translationImage(new PointF(moveFloat[0], moveFloat[1]));
                     clickPoint.set(currentX, currentY);
                 }
@@ -299,6 +348,21 @@ public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView
                 }
                 break;
             case MotionEvent.ACTION_UP:
+
+//                double allMoveX =  event.getX()-originClickPoint.x;
+//                double allMoveY =  event.getY()-originClickPoint.y;
+//                // 获取位移速度
+//                follSpeed = Math.sqrt(Math.pow(allMoveX,2)+Math.pow(allMoveY,2))/(200);
+//                double follSpeedX = Math.abs(allMoveX)/200;
+//                double follSpeedY = Math.abs(allMoveY)/200;
+//                if(System.currentTimeMillis()-lastClickTime>=RememberTime&&(allMoveY)>=minMoveDistance||allMoveX>=minMoveDistance&&lastFingerNum == 1){
+//                    for (int i = 0; i < autoSlideTime; i++) {
+//                        translationImage(new PointF((float) follSpeedX,(float) follSpeedY));
+//                    }
+////                    translationImage(new PointF((float)follSpeed*autoSlideTime,(float) follSpeed*autoSlideTime));
+//                }
+//
+
                 //手指松开时触发事件
                 lastFingerNum = 0;
                 break;
@@ -423,4 +487,6 @@ public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView
         }
         return new float[]{moveX, moveY};
     }
+
+
 }

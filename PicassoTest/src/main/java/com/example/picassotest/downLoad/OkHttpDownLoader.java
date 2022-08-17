@@ -1,15 +1,12 @@
-package com.example.picassotest.DownLoad;
+package com.example.picassotest.downLoad;
 
-import android.content.Context;
 import android.net.Uri;
 
 import com.example.picassotest.Utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

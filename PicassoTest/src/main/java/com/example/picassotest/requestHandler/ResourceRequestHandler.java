@@ -1,4 +1,4 @@
-package com.example.picassotest.RequestHandler;
+package com.example.picassotest.requestHandler;
 
 import static android.content.ContentResolver.SCHEME_ANDROID_RESOURCE;
 

@@ -1,4 +1,4 @@
-package com.example.picassotest.DownLoad;
+package com.example.picassotest.downLoad;
 
 import android.graphics.Bitmap;
 import android.net.Uri;

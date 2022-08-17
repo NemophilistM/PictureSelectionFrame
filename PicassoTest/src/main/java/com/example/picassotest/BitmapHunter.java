@@ -7,9 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.example.picassotest.Action.Action;
-import com.example.picassotest.RequestHandler.Request;
-import com.example.picassotest.RequestHandler.RequestHandler;
+import com.example.picassotest.action.Action;
+import com.example.picassotest.requestHandler.Request;
+import com.example.picassotest.requestHandler.RequestHandler;
 
 import java.io.IOException;
 import java.io.InputStream;

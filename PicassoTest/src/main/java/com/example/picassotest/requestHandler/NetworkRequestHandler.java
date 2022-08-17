@@ -1,12 +1,8 @@
-package com.example.picassotest.RequestHandler;
+package com.example.picassotest.requestHandler;
 
-import android.graphics.Bitmap;
-
-import com.example.picassotest.DownLoad.OkHttpDownLoader;
+import com.example.picassotest.downLoad.OkHttpDownLoader;
 
 import java.io.IOException;
-
-import okhttp3.Response;
 
 public class NetworkRequestHandler extends RequestHandler{
 

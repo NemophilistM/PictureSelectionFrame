@@ -1,10 +1,10 @@
-package com.example.picassotest.Action;
+package com.example.picassotest.action;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.example.picassotest.PicassoTest;
-import com.example.picassotest.RequestHandler.Request;
+import com.example.picassotest.requestHandler.Request;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;

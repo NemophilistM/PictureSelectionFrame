@@ -1,4 +1,4 @@
-package com.example.picassotest.RequestHandler;
+package com.example.picassotest.requestHandler;
 
 
 import static com.example.picassotest.PicassoDrawable.setBitmap;
@@ -15,8 +15,8 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.example.picassotest.Action.Action;
-import com.example.picassotest.Action.ImageViewAction;
+import com.example.picassotest.action.Action;
+import com.example.picassotest.action.ImageViewAction;
 import com.example.picassotest.Constants;
 import com.example.picassotest.PicassoTest;
 

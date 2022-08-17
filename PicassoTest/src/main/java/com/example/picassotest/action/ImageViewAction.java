@@ -1,4 +1,4 @@
-package com.example.picassotest.Action;
+package com.example.picassotest.action;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import com.example.picassotest.Constants;
 import com.example.picassotest.PicassoDrawable;
 import com.example.picassotest.PicassoTest;
-import com.example.picassotest.RequestHandler.Request;
+import com.example.picassotest.requestHandler.Request;
 
 public class ImageViewAction extends Action {
     public ImageViewAction(PicassoTest picasso, Request request, ImageView target, int errorResId, String key,Object tag) {

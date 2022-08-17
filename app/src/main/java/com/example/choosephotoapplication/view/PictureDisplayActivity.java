@@ -73,6 +73,8 @@ public class PictureDisplayActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = binding.rvPictureDisplay;
 
+
+
         // 对数据更新的观察
         viewModel.fileImg.observe(this,pictureList->{
             binding.rvPictureDisplay.setVisibility(View.VISIBLE);

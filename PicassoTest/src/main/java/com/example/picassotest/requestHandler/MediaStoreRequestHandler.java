@@ -1,4 +1,4 @@
-package com.example.picassotest.RequestHandler;
+package com.example.picassotest.requestHandler;
 
 import static android.content.ContentResolver.SCHEME_CONTENT;
 import static android.content.ContentUris.parseId;
@@ -7,9 +7,9 @@ import static android.provider.MediaStore.Images.Thumbnails.MICRO_KIND;
 import static android.provider.MediaStore.Images.Thumbnails.MINI_KIND;
 
 import static com.example.picassotest.PicassoTest.LoadedFrom.DISK;
-import static com.example.picassotest.RequestHandler.MediaStoreRequestHandler.PicassoKind.FULL;
-import static com.example.picassotest.RequestHandler.MediaStoreRequestHandler.PicassoKind.MICRO;
-import static com.example.picassotest.RequestHandler.MediaStoreRequestHandler.PicassoKind.MINI;
+import static com.example.picassotest.requestHandler.MediaStoreRequestHandler.PicassoKind.FULL;
+import static com.example.picassotest.requestHandler.MediaStoreRequestHandler.PicassoKind.MICRO;
+import static com.example.picassotest.requestHandler.MediaStoreRequestHandler.PicassoKind.MINI;
 
 import android.content.ContentResolver;
 import android.content.Context;

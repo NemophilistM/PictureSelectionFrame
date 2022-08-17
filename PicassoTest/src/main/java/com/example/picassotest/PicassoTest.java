@@ -17,12 +17,11 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
-import com.example.picassotest.Action.Action;
-import com.example.picassotest.DownLoad.DownLoader;
-import com.example.picassotest.DownLoad.OkHttpDownLoader;
-import com.example.picassotest.RequestHandler.MediaStoreRequestHandler;
-import com.example.picassotest.RequestHandler.RequestCreator;
-import com.example.picassotest.RequestHandler.RequestHandler;
+import com.example.picassotest.action.Action;
+import com.example.picassotest.downLoad.DownLoader;
+import com.example.picassotest.requestHandler.MediaStoreRequestHandler;
+import com.example.picassotest.requestHandler.RequestCreator;
+import com.example.picassotest.requestHandler.RequestHandler;
 
 import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;

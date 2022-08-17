@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CheckBoxView">
+        <attr name="circle_radio" format="dimension"/>
+        <attr name="circle_color" format="color"/>
+        <attr name="circle_size" format="dimension"/>
+        <attr name="inside_circle_color" format="color"/>
+    </declare-styleable>
+
+</resources>

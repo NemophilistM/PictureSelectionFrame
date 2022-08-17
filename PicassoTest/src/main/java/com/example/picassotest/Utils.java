@@ -1,9 +1,5 @@
 package com.example.picassotest;
 
-import static android.content.Context.ACTIVITY_SERVICE;
-import static android.content.pm.ApplicationInfo.FLAG_LARGE_HEAP;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static android.os.Build.VERSION_CODES.HONEYCOMB_MR1;
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
@@ -15,8 +11,8 @@ import android.os.Looper;
 import android.os.Process;
 import android.os.StatFs;
 
-import com.example.picassotest.DownLoad.OkHttpDownLoader;
-import com.example.picassotest.RequestHandler.Request;
+import com.example.picassotest.downLoad.OkHttpDownLoader;
+import com.example.picassotest.requestHandler.Request;
 
 import java.io.File;
 import java.io.IOException;
