@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,12 +29,12 @@ public class PictureDisplayByPicassoTestAdapter extends RecyclerView.Adapter<Pic
     /**
      * 保存有所以图片uri的集合
      */
-    private List<FileImgBean> fileImgBeans;
+    private final List<FileImgBean> fileImgBeans;
 
     /**
      * 用于view层回调的接口
      */
-    private CallbackEnter callbackEnter;
+    private final CallbackEnter callbackEnter;
     /**
      * 用于判断是否为第一次展示
      */
@@ -43,13 +44,13 @@ public class PictureDisplayByPicassoTestAdapter extends RecyclerView.Adapter<Pic
     /**
      * recycleView自身实例
      */
-    private RecyclerView recyclerView;
+    private final RecyclerView recyclerView;
     private final Context context;
 
     /**
-     * 存储图片的uri
+     * 存储图片的信息
      */
-    private List<Uri> selectUriList;
+    private final ArrayList<FileImgBean> selectFileBeanList;
 
     /**
      * 记录选中位置
@@ -59,7 +60,15 @@ public class PictureDisplayByPicassoTestAdapter extends RecyclerView.Adapter<Pic
     /**
      * 被选的图片位置
      */
-    private List<Integer> selectPicList;
+    private final List<Integer> selectPicList;
+
+    /**
+     * 存储被点击的cb
+     */
+    private final List<SelectCheckbox> selectViewList;
+
+    private final int maxSelect = 7;
+
 
     public PictureDisplayByPicassoTestAdapter(Context context, List<FileImgBean> fileImgBeans, RecyclerView recyclerView, CallbackEnter callbackEnter) {
         this.callbackEnter = callbackEnter;
@@ -68,7 +77,8 @@ public class PictureDisplayByPicassoTestAdapter extends RecyclerView.Adapter<Pic
         this.context = context;
 
         selectPicList = new ArrayList<>();
-        selectUriList = new ArrayList<>();
+        selectFileBeanList = new ArrayList<>();
+        selectViewList = new ArrayList<>();
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -108,15 +118,16 @@ public class PictureDisplayByPicassoTestAdapter extends RecyclerView.Adapter<Pic
     public void onBindViewHolder(@NonNull PictureDisplayByPicassoTestAdapter.ViewHolder holder, int position) {
         int nowPosition = position * 4;
         if (position > fileImgBeans.size() / 4) {
-//            holder.viewOne.setTag(fileImgBeans.get(nowPosition).getUri());
             PicassoTest.with(context).load(fileImgBeans.get(nowPosition).getUri()).resize(200, 200).centerInside().placeholder(R.drawable.ic_wait).tag(context).into(holder.viewOne);
+            setCheckbox(holder.cbOne, nowPosition);
 
             if (nowPosition + 1 < fileImgBeans.size()) {
-//                holder.viewTwo.setTag(fileImgBeans.get(nowPosition+1).getUri());
                 PicassoTest.with(context).load(fileImgBeans.get(nowPosition + 1).getUri()).resize(200, 200).centerInside().placeholder(R.drawable.ic_wait).tag(context).into(holder.viewTwo);
+                setCheckbox(holder.cbTwo, nowPosition);
+
             } else if (nowPosition + 2 < fileImgBeans.size()) {
-//                holder.viewThree.setTag(fileImgBeans.get(nowPosition+2).getUri());
                 PicassoTest.with(context).load(fileImgBeans.get(nowPosition + 2).getUri()).resize(200, 200).centerInside().placeholder(R.drawable.ic_wait).tag(context).into(holder.viewThree);
+                setCheckbox(holder.cbThree, nowPosition);
             }
 
         } else {
@@ -135,26 +146,6 @@ public class PictureDisplayByPicassoTestAdapter extends RecyclerView.Adapter<Pic
             });
 
             setCheckbox(holder.cbOne, nowPosition);
-//            for (int i = 0; i < selectPicList.size(); i++) {
-//                if(selectPicList.get(i) == nowPosition){
-//                    holder.cbOne.setViewText(String.valueOf(i),true);
-//                }else {
-//                    holder.cbOne.setViewText("",false);
-//                }
-//            }
-//
-//            holder.cbOne.setOnClickListener(v -> {
-//
-//                if(holder.cbOne.isViewSelected()){
-//                    holder.cbOne.setViewText("",false);
-//                }else {
-//                    holder.cbOne.setViewText(String.valueOf(selectPosition),true);
-//                    selectPosition++;
-//                    selectUriList.add(fileImgBeans.get(nowPosition).getUri());
-//                    selectPicList.add(nowPosition);
-//                }
-//
-//            });
             holder.viewTwo.setOnClickListener(v -> {
                 callbackEnter.enter(nowPosition + 1);
             });
@@ -210,25 +201,43 @@ public class PictureDisplayByPicassoTestAdapter extends RecyclerView.Adapter<Pic
         int index = 0;
         for (int i = 0; i < selectPicList.size(); i++) {
             if (selectPicList.get(i) == nowPosition) {
-                index = i+1;
+                index = i + 1;
             }
         }
-        if(index!=0){
-            cb.setViewText(String.valueOf(index),true);
-        }else {
-            cb.setViewText("",false);
+        if (index != 0) {
+            cb.setViewText(String.valueOf(index), true);
+        } else {
+            cb.setViewText("", false);
         }
         cb.setOnClickListener(v -> {
-            if (cb.isViewSelected()) {
-                cb.setViewText("", false);
-                selectPicList.remove((Object) nowPosition);
+            if (selectPosition > maxSelect && !cb.isViewSelected()) {
+                Toast.makeText(context, "预览图片已达到最高，请勿继续选取", Toast.LENGTH_SHORT).show();
             } else {
-                cb.setViewText(String.valueOf(selectPosition), true);
-                selectPosition++;
-                selectUriList.add(fileImgBeans.get(nowPosition).getUri());
-                selectPicList.add(nowPosition);
+                if (cb.isViewSelected()) {
+                    cb.setViewText("", false);
+                    selectPicList.remove((Object) nowPosition);
+                    selectViewList.remove(cb);
+                    selectFileBeanList.remove(fileImgBeans.get(nowPosition));
+                    selectPosition--;
+                    for (int i = 0; i < selectViewList.size(); i++) {
+                        SelectCheckbox selectCheckbox = selectViewList.get(i);
+                        selectCheckbox.setViewText(String.valueOf(i + 1), true);
+
+
+                    }
+                } else {
+                    cb.setViewText(String.valueOf(selectPosition), true);
+                    selectPosition++;
+                    selectFileBeanList.add(fileImgBeans.get(nowPosition));
+                    selectPicList.add(nowPosition);
+                    selectViewList.add(cb);
+                }
             }
 
+
         });
+    }
+    public ArrayList<FileImgBean> getSelectFileBeanList(){
+        return selectFileBeanList;
     }
 }

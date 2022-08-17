@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.HandlerThread;
 import android.os.Parcelable;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
@@ -108,6 +110,17 @@ public class PictureDisplayActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_hamburger_button);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(this, EachPictureShowActivity.class);
+            intent.putParcelableArrayListExtra(Constants.PARCELABLE, adapter.getSelectFileBeanList());
+            intent.putExtra(Constants.LIST_POSITION, 2);
+            startActivity(intent);
+        }
+        return true;
     }
 
     @Override

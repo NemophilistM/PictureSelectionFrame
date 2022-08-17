@@ -36,7 +36,7 @@ public class EachPictureShowActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         Intent intent = getIntent();
         if (intent != null) {
-            position = intent.getIntExtra(Constants.LIST_POSITION, 0);
+            position = intent.getIntExtra(Constants.LIST_POSITION, 1);
 //            fileImgBeans = intent.getParcelableExtra(Constants.PARCELABLE);
             fileImgBeans = intent.getParcelableArrayListExtra(Constants.PARCELABLE);
 
@@ -52,8 +52,9 @@ public class EachPictureShowActivity extends AppCompatActivity {
         binding.tvEachPosition.setText(position+"/"+fileImgBeans.size());
 
         EachPictureShowPagerAdapter adapter = new EachPictureShowPagerAdapter(this,fileImgBeans);
+        binding.vpDisplayPicture.setCurrentItem(position-1);
         binding.vpDisplayPicture.setAdapter(adapter);
-        binding.vpDisplayPicture.setCurrentItem(position);
+
 
         // 实现vp的滑动监听
         initListener();
@@ -66,7 +67,7 @@ public class EachPictureShowActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                binding.tvEachPosition.setText(position+"/"+fileImgBeans.size());
+                binding.tvEachPosition.setText(position+1+"/"+fileImgBeans.size());
             }
 
             @Override
