@@ -117,7 +117,7 @@ public class PictureDisplayActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             Intent intent = new Intent(this, EachPictureShowActivity.class);
             intent.putParcelableArrayListExtra(Constants.PARCELABLE, adapter.getSelectFileBeanList());
-            intent.putExtra(Constants.LIST_POSITION, 2);
+            intent.putExtra(Constants.LIST_POSITION, 0);
             startActivity(intent);
         }
         return true;

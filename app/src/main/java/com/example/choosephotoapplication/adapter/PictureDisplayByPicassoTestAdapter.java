@@ -222,8 +222,6 @@ public class PictureDisplayByPicassoTestAdapter extends RecyclerView.Adapter<Pic
                     for (int i = 0; i < selectViewList.size(); i++) {
                         SelectCheckbox selectCheckbox = selectViewList.get(i);
                         selectCheckbox.setViewText(String.valueOf(i + 1), true);
-
-
                     }
                 } else {
                     cb.setViewText(String.valueOf(selectPosition), true);

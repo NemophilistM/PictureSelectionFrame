@@ -1,5 +1,6 @@
 package com.example.choosephotoapplication.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.Window;
 
 import com.example.choosephotoapplication.R;
@@ -36,7 +38,8 @@ public class EachPictureShowActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         Intent intent = getIntent();
         if (intent != null) {
-            position = intent.getIntExtra(Constants.LIST_POSITION, 1);
+//            position = intent.getIntExtra(Constants.LIST_POSITION, 1);
+            position = intent.getIntExtra(Constants.LIST_POSITION, 0);
 //            fileImgBeans = intent.getParcelableExtra(Constants.PARCELABLE);
             fileImgBeans = intent.getParcelableArrayListExtra(Constants.PARCELABLE);
 
@@ -49,11 +52,13 @@ public class EachPictureShowActivity extends AppCompatActivity {
         //标题栏初始化
         initToolBar();
 
-        binding.tvEachPosition.setText(position+"/"+fileImgBeans.size());
+        binding.tvEachPosition.setText(position + "/" + fileImgBeans.size());
 
-        EachPictureShowPagerAdapter adapter = new EachPictureShowPagerAdapter(this,fileImgBeans);
-        binding.vpDisplayPicture.setCurrentItem(position-1);
+        EachPictureShowPagerAdapter adapter = new EachPictureShowPagerAdapter(this, fileImgBeans);
+
         binding.vpDisplayPicture.setAdapter(adapter);
+
+        binding.vpDisplayPicture.setCurrentItem(position);
 
 
         // 实现vp的滑动监听
@@ -67,7 +72,7 @@ public class EachPictureShowActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                binding.tvEachPosition.setText(position+1+"/"+fileImgBeans.size());
+                binding.tvEachPosition.setText(position + 1 + "/" + fileImgBeans.size());
             }
 
             @Override
@@ -90,5 +95,13 @@ public class EachPictureShowActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_return);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return true;
     }
 }

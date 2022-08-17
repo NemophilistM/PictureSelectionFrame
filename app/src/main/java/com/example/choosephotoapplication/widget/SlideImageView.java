@@ -1,5 +1,6 @@
 package com.example.choosephotoapplication.widget;
 
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.PointF;
@@ -10,28 +11,37 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.example.choosephotoapplication.R;
+
 public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView implements View.OnTouchListener {
 
     private Matrix matrix;
+    private final Context context;
 
     public SlideImageView(@NonNull Context context) {
         super(context);
+        this.context = context;
         init();
     }
 
     public SlideImageView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         init();
     }
 
     public SlideImageView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
         init();
 
     }
@@ -179,6 +189,7 @@ public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView
     private PointF originClickPoint = new PointF();
 
     private float clickRange = 50;
+    private ScaleAnimation scaleAnimation;
 
 
 
@@ -213,19 +224,41 @@ public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView
                     if (System.currentTimeMillis() - lastClickTime <= doubleClickTimeSpan && Math.abs(originClickPoint.x - clickPoint.x) < clickRange && Math.abs(originClickPoint.y - clickPoint.y) < clickRange) {
                         //如果图片此时缩放模式是普通模式，就触发双击放大
                         if (zoomInMode == ZoomMode.Ordinary) {
+//                            //分别记录被点击的点到图片左上角x,y轴的距离与图片x,y轴边长的比例，方便在进行缩放后，算出这个点对应的坐标点
+//                            tempPoint.set((clickPoint.x - bitmapOriginPoint.x) / scaleSize.x, (clickPoint.y - bitmapOriginPoint.y) / scaleSize.y);
+//                            originClickPoint.x = event.getX();
+//                            originClickPoint.y = event.getY();
+//                            //进行缩放
+//                            scaleImage(new PointF(originScale.x * doubleClickZoom, originScale.y * doubleClickZoom));
+//                            //获取缩放后，图片左上角的xy坐标
+//                            getBitmapOffset();
+//                            //平移图片，使得被点击的点的位置不变。这里是计算缩放后被点击的xy坐标，与原始点击的位置的xy坐标值，计算出差值，然后做平移动作
+//                            translationImage(new PointF(clickPoint.x - (bitmapOriginPoint.x + tempPoint.x * scaleSize.x), clickPoint.y - (bitmapOriginPoint.y + tempPoint.y * scaleSize.y)));
+//                            zoomInMode = ZoomMode.ZoomIn;
+//                            //并在双击放大后记录缩放比例
+//                            doubleFingerScale = originScale.x * doubleClickZoom;
+
+
                             //分别记录被点击的点到图片左上角x,y轴的距离与图片x,y轴边长的比例，方便在进行缩放后，算出这个点对应的坐标点
                             tempPoint.set((clickPoint.x - bitmapOriginPoint.x) / scaleSize.x, (clickPoint.y - bitmapOriginPoint.y) / scaleSize.y);
                             originClickPoint.x = event.getX();
                             originClickPoint.y = event.getY();
-                            //进行缩放
-                            scaleImage(new PointF(originScale.x * doubleClickZoom, originScale.y * doubleClickZoom));
                             //获取缩放后，图片左上角的xy坐标
                             getBitmapOffset();
-                            //平移图片，使得被点击的点的位置不变。这里是计算缩放后被点击的xy坐标，与原始点击的位置的xy坐标值，计算出差值，然后做平移动作
-                            translationImage(new PointF(clickPoint.x - (bitmapOriginPoint.x + tempPoint.x * scaleSize.x), clickPoint.y - (bitmapOriginPoint.y + tempPoint.y * scaleSize.y)));
+                            if (scaleAnimation!=null){
+                                scaleAnimation.cancel();
+                            }
                             zoomInMode = ZoomMode.ZoomIn;
                             //并在双击放大后记录缩放比例
                             doubleFingerScale = originScale.x * doubleClickZoom;
+                            scaleAnimation = new ScaleAnimation(1f,originScale.x*doubleClickZoom,1f,originScale.y*doubleClickZoom,clickPoint.x,clickPoint.y);
+                            scaleAnimation.setDuration(2000);
+                            scaleAnimation.setFillAfter(true);
+//                            scaleAnimation.setRepeatMode(ScaleAnimation.);
+//                            scaleAnimation.setRepeatCount(ScaleAnimation.INFINITE);
+                            this.startAnimation(scaleAnimation);
+                            //平移图片，使得被点击的点的位置不变。这里是计算缩放后被点击的xy坐标，与原始点击的位置的xy坐标值，计算出差值，然后做平移动作
+                            translationImage(new PointF(clickPoint.x - (bitmapOriginPoint.x + tempPoint.x * scaleSize.x), clickPoint.y - (bitmapOriginPoint.y + tempPoint.y * scaleSize.y)));
 
                         } else {
                             //双击还原
@@ -374,12 +407,18 @@ public class SlideImageView extends androidx.appcompat.widget.AppCompatImageView
      * 设置图片居中等比显示
      */
     private void showCenter() {
+        if(scaleAnimation!=null){
+            scaleAnimation.cancel();
+        }
         float scaleX = viewSize.x / imageSize.x;
         float scaleY = viewSize.y / imageSize.y;
 
         float scale = Math.min(scaleX, scaleY);
         scaleImage(new PointF(scale, scale));
-
+//        ScaleAnimation scaleAnimation2 = new ScaleAnimation(originScale.x*doubleClickZoom,imageSize.x,originScale.y*doubleClickZoom,imageSize.y,clickPoint.x,clickPoint.y);
+//        scaleAnimation2.setDuration(2000);
+//        scaleAnimation2.setFillAfter(true);
+//        this.startAnimation(scaleAnimation2);
         //移动图片，并保存最初的图片左上角（即原点）所在坐标
         if (scaleX < scaleY) {
             translationImage(new PointF(0, viewSize.y / 2 - scaleSize.y / 2));
